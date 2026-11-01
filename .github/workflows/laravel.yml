@@ -43,6 +43,7 @@ jobs:
       uses: docker/build-push-action@v7
       env:
         APP_URL: ${{ secrets.APP_URL }}
+        APP_NAME: ${{ secrets.APP_NAME }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
