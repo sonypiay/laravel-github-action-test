@@ -13,16 +13,42 @@ jobs:
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.4'
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
     - name: Print Laravel version
       run: php artisan --version
+
     - name: Generate key
       run: php artisan key:generate --ansi
+
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+
     - name: Execute test
       run: php artisan test
+
+    - name: Login to Dockerhub
+      uses: docker/login-action@v4
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build image and push
+      id: docker_build
+      uses: docker/build-push-action@v7
+      env:
+        APP_URL: ${{ secrets.APP_URL }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+      with:
+        push: true
+        tags: sonypiay/laravel-github-actions-demo:latest

@@ -1,0 +1,6 @@
+.env
+.gitattributes
+.phpunit.result.cache
+vendor
+.gitignore
+.github
