@@ -3,6 +3,12 @@ FROM composer:latest AS vendor
 FROM php:8.4-trixie
 
 ENV TZ="Asia/Jakarta"
+ENV APP_URL=http://localhost:8000
+ENV APP_NAME=Laravel
+ENV DB_CONNECTION=mysql
+ENV DB_HOST=localhost
+ENV DB_PORT=3306
+
 RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
 
 RUN apt-get -y update
